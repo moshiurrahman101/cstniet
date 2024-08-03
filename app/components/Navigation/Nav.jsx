@@ -24,7 +24,7 @@ function Nav(props) {
         </ul>
         <div className='flex  items-center justify-between space-x-3'>
           <button className='text-[14px] py-1 px-3 lg:text-[17px] lg:py-2 lg:px-4 bg-yellow-400 text-black rounded-full'>
-            <Link href={'/dashboard/login'}>Login</Link>
+            <Link href={'/login'}>Login</Link>
           </button>
           <FaBars onClick={props.openNav} className='text-white lg:hidden'/>
         </div>

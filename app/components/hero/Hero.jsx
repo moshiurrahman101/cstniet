@@ -17,7 +17,7 @@ function Hero() {
             <button className="py-2 px-3 md:px-5 bg-blue-700 text-white rounded-full">
               <Link href={'/about-us'}>Learn More</Link>
             </button>
-            <button className="py-2 px-3 md:px-5 bg-purple-700 text-white rounded-full">Student Login</button>
+            <button className="py-2 px-3 md:px-5 bg-purple-700 text-white rounded-full"><Link href={'/login'}>Student Login</Link></button>
           </div>
         </div>
         <div className="col-span-3 hidden md:mt-[5rem] sm:block lg:ml-20 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-purple-600 via-purple-200 to-white rounded-full ">

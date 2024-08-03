@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
+import Link from "next/link";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -79,10 +80,10 @@ function LoginForm() {
   }
 
   return (
-    <div className="h-[80vh] flex justify-center items-center">
+    <div className="h-[80vh] flex justify-center items-center mt-3">
       <div className="w-[400px] rounded-md shadow-lg p-5">
         {
-          message?
+          message.type?
           <div className={message.type=="success"? "bg-teal-200 text-green-700":"bg-red-200 text-red-700" + "px-7 text-sm"}><span className="my-5 mx-10">{message.data}</span></div>
           :
           <div></div>
@@ -91,18 +92,15 @@ function LoginForm() {
           Login your account!
         </h2>
         <form onSubmit={onSubmit}>
-
-          <Label htmlFor="name">Your full name</Label>
-          <Input type="text" className="mb-2"/>
           <Label htmlFor="email">Your email address</Label>
           <Input type="email" className="mb-2"/>
-          <Label htmlFor="phone">Your phone number</Label>
-          <Input type="tel" className="mb-2"/>
           <Label htmlFor="password">Password</Label>
           <Input type="password" className="mb-2"/>
 
-          <Button className="mt-5">Signup</Button>
-
+          <Button className="mt-5 w-full">Login</Button>
+          <div className="text-sm text-center mt-5">
+                <Label htmlFor="link">If you are new?<Link href="/signup" className="font-bold text-red-500"> Signup</Link></Label>
+            </div>
         </form>
       </div>
     </div>

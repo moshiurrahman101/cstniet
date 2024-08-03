@@ -4,7 +4,7 @@ function AboutDetails() {
   return (
     <div className="items-center flex flex-col">
       <h2 className="font-bold text-[32px] pt-5 pb-5 text-purple-800">Who we are?</h2>
-      <div className=' w-[700px] lg:w-[700px] md:w-full sm:w-full'>
+      <div className=' w-[700px] lg:w-[700px] md:w-full sm:w-full pb-5'>
         <p className='text-justify'>Welcome to the Department of Computer Science & Technology (CST) at the National Institute of Engineering and Technology (NIET), Dhaka Campus. As one of the premier private polytechnic institutes in Bangladesh, NIET is renowned for its commitment to excellence in technical education, and the CST department stands as a testament to this dedication.</p>
         <h2 className='font-bold text-[32px] pt-5 pb-5 text-slate-800'>Our Mission</h2>
         <p className='text-justify'>Our mission is to provide top-tier education in computer science and technology, preparing our students to become leaders in the ever-evolving tech landscape. We aim to foster a learning environment that encourages innovation, critical thinking, and practical problem-solving skills.</p>
