@@ -2,105 +2,101 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { cn } from "@/lib/utils";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { auth } from "@/firebase/firebase";
+import { signInWithEmailAndPassword } from "firebase/auth";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
-
-const formSchema = z.object({
-  name: z.string().min(2, {
-    message: "Name must be at least 2 characters.",
-  }),
-  email: z.string().email("Invalid email!").min(1, "Email is required."),
-  phone: z
-    .number()
-    .int()
-    .positive("Phone number must be positive number.")
-    .min(10, {
-      message: "Number is invalid!",
-    }),
-  password: z.string().min(8, {
-    message: "Password must be 8 character!",
-  }),
-});
 
 function LoginForm() {
   const [message, setMessage] = useState({});
+  const router = useRouter();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    resetField,
+  } = useForm();
 
-  const form =
-    useForm <
-    z.infer <
-    typeof formSchema >>
-      {
-        resolver: zodResolver(formSchema),
-        defaultValues: {
-          name: "",
-          email: "",
-          phone: 0,
-          password: "",
-        },
-      };
-
-  const onSubmit = (e) => {
-    e.preventDefault();
-    console.log(e)
-    if (e.target[0].value=="" || e.target[1].value=="" || e.target[2].value=="" || e.target[3].value=="") {
-      alert('Field canot be empty');
-    }
-
-    const values = {
-      name: e.target[0].value,
-      email: e.target[1].value,
-      phone: parseInt(e.target[2].value),
-      password: e.target[3].value,
-    }
-    
-    try {
-      const validatedValues = formSchema.parse(values);
-      console.log(validatedValues);
-      setMessage({
-        type: "success",
-        data: "Successfully Submited!"
+  const SigninEntryFormHandle = async (formData) => {
+    signInWithEmailAndPassword(auth, formData.email, formData.password)
+      .then((userCredential) => {
+        // Signed in
+        const user = userCredential.user;
+        // ...
+        console.log(user);
+        router.push("/dashroad");
       })
-    } catch (e) {
-      if (e instanceof z.ZodError) {
-        // Handle validation errors
-        console.error("Validation errors:", e.errors);
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
         setMessage({
           type: "error",
-          data: "Validation error! Recheck & submit again."
-        })
-      } else {
-        // Handle other types of errors
-        console.error("Unexpected error:", e);
-      }
-    }
-  }
+          data: `${errorCode} : Try Again :)!`,
+        });
+      });
+  };
 
   return (
-    <div className="h-[80vh] flex justify-center items-center mt-3">
+    <div className="h-[80vh] flex justify-center items-center">
       <div className="w-[400px] rounded-md shadow-lg p-5">
-        {
-          message.type?
-          <div className={message.type=="success"? "bg-teal-200 text-green-700":"bg-red-200 text-red-700" + "px-7 text-sm"}><span className="my-5 mx-10">{message.data}</span></div>
-          :
-          <div></div>
-        }
         <h2 className="text-[24px] font-bold text-slate-800 text-center pb-5">
-          Login your account!
+          Login to your account!
         </h2>
-        <form onSubmit={onSubmit}>
-          <Label htmlFor="email">Your email address</Label>
-          <Input type="email" className="mb-2"/>
-          <Label htmlFor="password">Password</Label>
-          <Input type="password" className="mb-2"/>
+        {message?.type == "success" && (
+          <p className="text-sm font-bold py-2 px-4 bg-green-300 text-green-600">
+            {message.data}
+          </p>
+        )}
+        {message?.type == "error" && (
+          <p className="text-sm font-bold py-2 px-4 bg-red-300 text-red-600">
+            {message.data}
+          </p>
+        )}
+        <form action={handleSubmit(SigninEntryFormHandle)}>
+          <Label htmlFor="email">Login Email</Label>
+          <Input
+            type="email"
+            className="mb-2"
+            {...register("email", {
+              required: "Email is required",
+              pattern: {
+                value: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
+                message: "Invalid email address",
+              },
+            })}
+          />
+          {errors.email?.type == "required" && (
+            <p className="text-sm text-red-700 mb-2">Email is required</p>
+          )}
 
+          <Label htmlFor="password">Password</Label>
+          <Input
+            type="password"
+            className="mb-2"
+            {...register("password", {
+              required: "Password is required",
+              minLength: 8,
+            })}
+          />
+          {errors.password?.type == "required" && (
+            <p className="text-sm text-red-700 mb-2">Password is required</p>
+          )}
+          {errors.password?.type == "minLength" && (
+            <p className="text-sm text-red-700 mb-2">
+              Password must be 8 characters
+            </p>
+          )}
           <Button className="mt-5 w-full">Login</Button>
           <div className="text-sm text-center mt-5">
-                <Label htmlFor="link">If you are new?<Link href="/signup" className="font-bold text-red-500"> Signup</Link></Label>
-            </div>
+            <Label htmlFor="link">
+              If you have already account?{" "}
+              <Link href="/signup" className="font-bold text-red-500">
+                Signup
+              </Link>
+            </Label>
+          </div>
         </form>
       </div>
     </div>
