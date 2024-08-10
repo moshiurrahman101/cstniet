@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { firestore } from "@/firebase/firebase";
 import {collection, addDoc} from "firebase/firestore"
-import { createUserWithEmailAndPassword, getAuth } from "firebase/auth";
+import { createUserWithEmailAndPassword, getAuth, updateProfile } from "firebase/auth";
 import Link from "next/link";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -34,7 +34,9 @@ function SignupForm() {
             phone: formData.phone,
             email: formData.email,
           })
-          
+          updateProfile(auth.currentUser, {
+            displayName: formData.name,
+          });
           setMessage({
             type:"success",
             data: "User created succesfully!"

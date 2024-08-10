@@ -14,16 +14,7 @@ import { useDispatch, useSelector } from "react-redux";
 function LoginForm() {
   const router = useRouter();
   const dispatch = useDispatch();
-  const storeAuth = useSelector((state) => state.auth);
-  useEffect(() => {
-    const savedUser = localStorage.getItem('authUser');
-    if (savedUser) {
-      dispatch(setAuth(JSON.parse(savedUser)));
-    }
-    if(storeAuth.isAuthenticated){
-      router.push('/dashboard')
-    }
-  }, [dispatch], storeAuth);
+  
 
   const [message, setMessage] = useState({});
   const {
@@ -42,7 +33,11 @@ function LoginForm() {
         // Dispatch the setAuth action
         const userData = { uid, displayName, email, photoURL };
 
-        dispatch(setAuth(userData));
+        try {
+          dispatch(setAuth(userData));
+        } catch (error) {
+          console.log(error)
+        }
         localStorage.setItem("authUser", JSON.stringify(userData));
 
         router.push("/dashboard");
