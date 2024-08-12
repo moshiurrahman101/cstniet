@@ -1,11 +1,16 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import { setAuth } from "@/data/slices/authSlices";
+import { firestore } from "@/firebase/firebase";
+import getStudents from "@/firebase/getstudents";
+import { collection, getDocs, getFirestore } from "firebase/firestore";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-function Dashboard() {
+function Students() {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true); // Loading state
   const router = useRouter();
@@ -26,15 +31,25 @@ function Dashboard() {
     }
   }, [loading, storeAuth.isAuthenticated, router]);
 
+  // getting student 
+  
+  
   if (loading) {
     return (
-      <div className="h-screen w-screen bg-primary-700 flex justify-center items-center">
-        <div className="text-lg text-white font-bold">Logging out...</div>
+      <div className="w-full h-full flex justify-center items-center">
+        <div className="w-[250px] p-5 rounded-md bg-purple-600">Loading...</div>
       </div>
     ); // Render loading indicator while fetching data
   }
 
-  return <div>Dashboard</div>;
+  return (
+    <div className="flex justify-between items-center p-7">
+      <h2 className="text-2xl font-bold">Students</h2>
+      <Button>
+        <Link href={'/dashboard/students/add'}>+ Add New Student</Link>
+      </Button>
+    </div>
+  );
 }
 
-export default Dashboard;
+export default Students;

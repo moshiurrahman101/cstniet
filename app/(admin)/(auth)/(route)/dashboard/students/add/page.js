@@ -1,11 +1,17 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { setAuth } from "@/data/slices/authSlices";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
+import AddStudentForm from "../_components/AddStudentForm";
 
-function Dashboard() {
+function Students() {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true); // Loading state
   const router = useRouter();
@@ -28,13 +34,26 @@ function Dashboard() {
 
   if (loading) {
     return (
-      <div className="h-screen w-screen bg-primary-700 flex justify-center items-center">
-        <div className="text-lg text-white font-bold">Logging out...</div>
+      <div className="w-full h-full flex justify-center items-center">
+        <div className="w-[250px] p-5 rounded-md bg-purple-600">Loading...</div>
       </div>
     ); // Render loading indicator while fetching data
   }
 
-  return <div>Dashboard</div>;
+ 
+  
+
+  return (
+    <div>
+      <div className="flex justify-between items-center p-7">
+        <h2 className="text-2xl font-bold">Add New Students</h2>
+        <Button variant="secondary">
+          <Link href={"/dashboard/students/"}>Back</Link>
+        </Button>
+      </div>
+      <AddStudentForm />
+    </div>
+  );
 }
 
-export default Dashboard;
+export default Students;
