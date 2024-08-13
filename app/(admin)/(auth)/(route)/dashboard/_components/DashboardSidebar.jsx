@@ -27,7 +27,7 @@ import { useDispatch, useSelector } from "react-redux";
 import defaultPicture from "@/app/assets/images/teachers/default.jpg";
 import Link from "next/link";
 import { logout } from "@/data/slices/authSlices";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 function DashboardSidebar() {
   const [isLoggingOut, setIsLoggingOut] = useState(false);
@@ -76,6 +76,7 @@ function DashboardSidebar() {
       </div>
     </div>; 
   }
+  const path = usePathname();
   return (
     <div className="h-screen border shadow-md">
       <div className="flex justify-center">
@@ -87,7 +88,7 @@ function DashboardSidebar() {
           <Link href={menu.path}>
             <h2
               key={index}
-              className="flex items-center text-md gap-3 p-4 text-slate-500 hover:bg-purple-700 hover:text-white cursor-pointer rounded-lg"
+              className={`flex items-center text-md gap-3 mt-1 p-4 text-slate-500 hover:bg-primary hover:text-white cursor-pointer rounded-lg ${path==menu.path&&'bg-primary text-white'}`}
             >
               <menu.icon />
               {menu.name}

@@ -32,6 +32,8 @@ function AddStudentForm() {
             studentType: formData.studentType,
             session: formData.session,
             semester: formData.semester,
+            roll: formData.roll,
+            registrationNumber: formData.registrationNumber,
         })
         
         if (addDoc) {
@@ -50,6 +52,8 @@ function AddStudentForm() {
             resetField("studentType");
             resetField("session");
             resetField("semester");
+            resetField("roll");
+            resetField("registrationNumber");
         }
       } catch (error) {
         const errorCode = error.code;
@@ -58,7 +62,7 @@ function AddStudentForm() {
       }
   }
   return (
-    <div className="px-7 py-5">
+    <div className="px-7 py-2">
         {message?.type == "success" && (
           <p className=" mb-3 rounded-full w-[350px] text-sm font-bold py-2 px-4 bg-green-300 text-green-600">
             {message.data}
@@ -68,9 +72,9 @@ function AddStudentForm() {
           <div className="flex gap-4">
             <div className="grid w-full max-w-sm items-center gap-1.5">
               <Label htmlFor="studentName">Student name</Label>
-              <Input {...register("studentName")} type="text" placeholder="Student name" />
+              <Input {...register("studentName", {required: true})} type="text" placeholder="Student name" />
               <Label htmlFor="studentPhone">Student phone</Label>
-              <Input {...register("studentPhone")} type="text" placeholder="Student phone" />
+              <Input {...register("studentPhone")} type="text" placeholder="Student phone"/>
               <Label htmlFor="guardianPhone">Guardian phone</Label>
               <Input {...register("guardianPhone")} type="text" placeholder="Student parents phone" />
               <Label htmlFor="address">Address</Label>
@@ -86,22 +90,24 @@ function AddStudentForm() {
                 <option value={'O+'}>O+</option>
                 <option value={'O-'}>O-</option>
               </select>
+              <Label htmlFor="roll">Board Roll</Label>
+              <Input {...register("roll")} type="text" placeholder="Board Roll" />
             </div>
             <div className="grid w-full max-w-sm items-center gap-1.5">
               <Label htmlFor="studentId">Student Id.</Label>
-              <Input {...register("studentId")} type="text" placeholder="Student Identification no" />
+              <Input {...register("studentId", {required: true})} type="text" placeholder="Student Identification no" />
               <Label htmlFor="institute">Institute</Label>
-              <select {...register("institute")} className="border p-2 rounded-md text-sm text-slate-500">
+              <select {...register("institute",  {required: true})} className="border p-2 rounded-md text-sm text-slate-500">
                 <option value={'NIET'}>NIET</option>
                 <option value={'WII'}>WII</option>
               </select>
               <Label htmlFor="studentType">Student type</Label>
-              <select {...register("studentType")} className="border p-2 rounded-md text-sm text-slate-500">
+              <select {...register("studentType",  {required: true})} className="border p-2 rounded-md text-sm text-slate-500">
                 <option value={'Regular'}>Regular</option>
                 <option value={'Irregular'}>Irregular</option>
               </select>
               <Label htmlFor="session">Session</Label>
-              <select {...register("session")} className="border p-2 rounded-md text-sm text-slate-500">
+              <select {...register("session",  {required: true})} className="border p-2 rounded-md text-sm text-slate-500">
                 <option value={'2015-16'}>2015-16</option>
                 <option value={'2016-17'}>2016-17</option>
                 <option value={'2017-18'}>2017-18</option>
@@ -121,7 +127,7 @@ function AddStudentForm() {
               </select>
               
               <Label htmlFor="semester">Semester</Label>
-              <select {...register("semester")} className="border p-2 rounded-md text-sm text-slate-500">
+              <select {...register("semester",  {required: true})} className="border p-2 rounded-md text-sm text-slate-500">
                 <option value={'1st'}>1st</option>
                 <option value={'2nd'}>2nd</option>
                 <option value={'3rd'}>3rd</option>
@@ -131,6 +137,8 @@ function AddStudentForm() {
                 <option value={'7th'}>7th</option>
                 <option value={'8th'}>8th</option>
               </select>
+              <Label htmlFor="registrationNumber">Registration no.</Label>
+              <Input {...register("registrationNumber")} type="text" placeholder="Registration Number" />
             </div>
           </div>
             <Button className="mt-5">Save & Add</Button>

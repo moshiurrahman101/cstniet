@@ -3,16 +3,33 @@
 import { Button } from "@/components/ui/button";
 import { setAuth } from "@/data/slices/authSlices";
 import { firestore } from "@/firebase/firebase";
-import getStudents from "@/firebase/getstudents";
-import { collection, getDocs, getFirestore } from "firebase/firestore";
+import { collection, getDocs } from "firebase/firestore";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import StudentsListTable from "../_components/StudentsListTable";
+
+async function getStudentData() {
+    try {
+        const querySnapshot = await getDocs(collection(firestore, "students"));
+        const data = [];
+
+        querySnapshot.forEach((doc) => {
+            data.push({ id: doc.id, ...doc.data() }); // Use doc.data() as a function
+        });
+
+        return data;
+    } catch (error) {
+        console.error("Error fetching student data:", error.message);
+        console.error("Stack Trace:", error.stack);
+    }
+}
 
 function Students() {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true); // Loading state
+  const [studentsData, setStudentsData] = useState([]); // Loading state
   const router = useRouter();
 
   useEffect(() => {
@@ -30,8 +47,15 @@ function Students() {
       router.push("/login");
     }
   }, [loading, storeAuth.isAuthenticated, router]);
-
+  
   // getting student 
+  useEffect(()=> {
+    async function fetchData() {
+      const data = await getStudentData();
+      setStudentsData(data);
+    }
+    fetchData();
+  },[])
   
   
   if (loading) {
@@ -43,11 +67,14 @@ function Students() {
   }
 
   return (
-    <div className="flex justify-between items-center p-7">
-      <h2 className="text-2xl font-bold">Students</h2>
-      <Button>
-        <Link href={'/dashboard/students/add'}>+ Add New Student</Link>
-      </Button>
+    <div>
+      <div className="flex justify-between items-center px-7 py-2">
+        <h2 className="text-2xl font-bold">Students</h2>
+        <Button>
+          <Link href={'/dashboard/students/add'}>+ Add New Student</Link>
+        </Button>
+      </div>
+      <StudentsListTable studentList={studentsData}/>
     </div>
   );
 }
