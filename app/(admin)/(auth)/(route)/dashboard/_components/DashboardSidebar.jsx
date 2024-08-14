@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import logo from "@/app/assets/images/logo.png";
 import {
   BookIcon,
+  CalendarDays,
   GraduationCap,
   HandIcon,
   LayoutIcon,
@@ -57,6 +58,12 @@ function DashboardSidebar() {
     },
     {
       id: 6,
+      name: "Events",
+      path: "/dashboard/events",
+      icon: CalendarDays,
+    },
+    {
+      id: 6,
       name: "Settings",
       path: "/dashboard/settings",
       icon: Settings,
@@ -96,7 +103,7 @@ function DashboardSidebar() {
           </Link>
         ))}
       </div>
-      <div className="flex gap-2 items-center bottom-5 fixed p-4">
+      <div className="flex gap-2 items-center bottom-2 fixed p-4">
         <Image
           src={
             authData?.user?.profilePhoto ? user?.profilePhoto : defaultPicture

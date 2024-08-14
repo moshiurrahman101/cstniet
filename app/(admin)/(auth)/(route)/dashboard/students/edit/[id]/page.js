@@ -6,9 +6,9 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import AddStudentForm from "../_components/AddStudentForm";
+import EditStudentForm from "../../_components/EditStudentForm";
 
-function Students() {
+function EditStudent({params}) {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true); // Loading state
   const router = useRouter();
@@ -43,14 +43,14 @@ function Students() {
   return (
     <div>
       <div className="flex justify-between items-center p-7">
-        <h2 className="text-2xl font-bold">Add New Students</h2>
+        <h2 className="text-2xl font-bold">Edit Students details</h2>
         <Button variant="secondary">
           <Link href={"/dashboard/students/"}>Back</Link>
         </Button>
       </div>
-      <AddStudentForm />
+      <EditStudentForm id={params.id}/>
     </div>
   );
 }
 
-export default Students;
+export default EditStudent;

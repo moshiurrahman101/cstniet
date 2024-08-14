@@ -83,12 +83,12 @@ function Students() {
   return (
     <div>
       <div className="flex justify-between items-center px-7 py-2">
-        <h2 className="text-2xl font-bold">Students</h2>
+        <h2 className="text-2xl font-bold">Events</h2>
         <Button>
-          <Link href={'/dashboard/students/add'}>+ Add New Student</Link>
+          <Link href={'/dashboard/events/add'}>+ Add New Events</Link>
         </Button>
       </div>
-      <StudentsListTable studentList={studentsData} refreshData={dataRefreshTrigger}/>
+      
     </div>
   );
 }
