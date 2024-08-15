@@ -6,6 +6,15 @@ import { Button } from "@/components/ui/button";
 import { EyeIcon, PencilIcon, Search, Trash } from "lucide-react";
 import { useTheme } from "next-themes";
 import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+
+import {
   AlertDialog,
   AlertDialogAction,
   AlertDialogCancel,
@@ -18,36 +27,47 @@ import {
 } from "@/components/ui/alert-dialog";
 import deleteStudentRecord from "@/firebase/deleteOperations";
 import { useRouter } from "next/navigation";
+import StudentDetails from "./StudentDetails";
 
 const pagination = true;
 const paginationPageSize = 10;
 const paginationPageSizeSelector = [200, 500, 1000];
-
-
-
 
 function StudentsListTable({ studentList, refreshData }) {
   const router = useRouter();
   const customActionButton = (props) => {
     return (
       <div className="flex justify-center items-center gap-3 px-5">
-        <Button variant="outline">
-          <EyeIcon className="hover:text-green-700" />
-        </Button>
-        <Button variant="ghost" onClick={()=>EditActionHandle(props.data.id)}>
+        <Dialog>
+          <DialogTrigger>
+            <Button variant="outline">
+              <EyeIcon className="hover:text-green-700" />
+            </Button>
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Student Information</DialogTitle>
+              <DialogDescription>
+                <StudentDetails id={props.data.id}/>
+              </DialogDescription>
+            </DialogHeader>
+          </DialogContent>
+        </Dialog>
+
+        <Button variant="ghost" onClick={() => EditActionHandle(props.data.id)}>
           <PencilIcon />
         </Button>
         <AlertDialog>
           <AlertDialogTrigger>
-            <Button
-              variant="destructive"
-            >
+            <Button variant="destructive">
               <Trash />
             </Button>
           </AlertDialogTrigger>
           <AlertDialogContent>
             <AlertDialogHeader>
-              <AlertDialogTitle>Are sure to delete this record?</AlertDialogTitle>
+              <AlertDialogTitle>
+                Are sure to delete this record?
+              </AlertDialogTitle>
               <AlertDialogDescription>
                 This action cannot be undone. This will permanently delete your
                 record and remove your data from our servers.
@@ -55,7 +75,9 @@ function StudentsListTable({ studentList, refreshData }) {
             </AlertDialogHeader>
             <AlertDialogFooter>
               <AlertDialogCancel>Cancel</AlertDialogCancel>
-              <AlertDialogAction onClick={()=>deleteRecord(props.data.id)}>Continue</AlertDialogAction>
+              <AlertDialogAction onClick={() => deleteRecord(props.data.id)}>
+                Continue
+              </AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>
@@ -65,15 +87,15 @@ function StudentsListTable({ studentList, refreshData }) {
   // CRUD Functionality of record
   const deleteRecord = async (id) => {
     const result = await deleteStudentRecord(id);
-    if(result){
+    if (result) {
       refreshData();
     }
-  }
+  };
 
   // Edit actions
   const EditActionHandle = (id) => {
     router.push(`/dashboard/students/edit/${id}`);
-  }
+  };
 
   const { theme } = useTheme();
   const [colDefs, setColDefs] = useState([
@@ -96,12 +118,11 @@ function StudentsListTable({ studentList, refreshData }) {
   const [rowData, setRowData] = useState();
 
   const [searchInput, setSearchInput] = useState();
-  
+
   useEffect(() => {
     studentList ? setRowData(studentList) : "";
   }, [studentList]);
 
-  
   return (
     <div>
       <div className="p-2 ml-7 rounded-lg border shadow-sm flex gap-2 mb-4 max-w-sm">

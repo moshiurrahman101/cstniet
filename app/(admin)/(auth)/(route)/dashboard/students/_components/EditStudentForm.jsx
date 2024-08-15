@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { firestore as db } from "@/firebase/firebase";
-import { addDoc, collection, doc, getDoc, getDocs } from "firebase/firestore";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
@@ -12,6 +12,9 @@ function EditStudentForm({ id }) {
   const [studentData, setStudentData] = useState([]); // Loading state
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [message, setMessage] = useState({});
+
+  const { register, handleSubmit, reset } = useForm();
 
   useEffect(() => {
     if (id) {
@@ -21,9 +24,24 @@ function EditStudentForm({ id }) {
           const docSnap = await getDoc(docRef);
 
           if (docSnap.exists()) {
-            setStudentData(docSnap.data());
+            const data = docSnap.data();
+            setStudentData(data);
+            // Reset the form with the fetched data
+            reset({
+              studentName: data.studentName || "",
+              studentPhone: data.studentPhone || "",
+              guardianPhone: data.guardianPhone || "",
+              address: data.address || "",
+              bloodGroup: data.bloodGroup || "",
+              roll: data.roll || "",
+              studentId: data.studentId || "",
+              institute: data.institute || "",
+              studentType: data.studentType || "",
+              session: data.session || "",
+              semester: data.semester || "",
+              registrationNumber: data.registrationNumber || "",
+            });
           } else {
-            console.log("No such document!");
             setError("No student found with the provided ID.");
           }
         } catch (err) {
@@ -36,21 +54,13 @@ function EditStudentForm({ id }) {
 
       fetchStudentData();
     }
-  }, [id]);
+  }, [id, reset]);
 
-  // Student add part
-  const [message, setMessage] = useState({});
-  const {
-    register,
-    handleSubmit,
-    resetField,
-  } = useForm({defaultValues: {
-    studentName: "",
-  }});
-
-  const StudentEntryFormHandle = async (formData) => {
+  const StudentUpdateFormHandle = async (formData) => {
     try {
-      const docRef = await addDoc(collection(firestore, "students"), {
+      const docRef = doc(db, "students", id); // Reference to the document to update
+
+      await updateDoc(docRef, {
         studentName: formData.studentName,
         studentPhone: formData.studentPhone,
         guardianPhone: formData.guardianPhone,
@@ -65,24 +75,10 @@ function EditStudentForm({ id }) {
         registrationNumber: formData.registrationNumber,
       });
 
-      if (addDoc) {
-        setMessage({
-          type: "success",
-          data: "Student added succesfully!",
-        });
-        resetField("studentName");
-        resetField("studentPhone");
-        resetField("guardianPhone");
-        resetField("address");
-        resetField("bloodGroup");
-        resetField("studentId");
-        resetField("institute");
-        resetField("studentType");
-        resetField("session");
-        resetField("semester");
-        resetField("roll");
-        resetField("registrationNumber");
-      }
+      setMessage({
+        type: "success",
+        data: "Student updated succesfully!",
+      });
     } catch (error) {
       const errorCode = error.code;
       const errorMessage = error.message;
@@ -110,7 +106,7 @@ function EditStudentForm({ id }) {
           {message.data}
         </p>
       )}
-      <form action={handleSubmit(StudentEntryFormHandle)}>
+      <form action={handleSubmit(StudentUpdateFormHandle)}>
         <div className="flex gap-4">
           <div className="grid w-full max-w-sm items-center gap-1.5">
             <Label htmlFor="studentName">Student name</Label>
@@ -195,19 +191,13 @@ function EditStudentForm({ id }) {
                 O-
               </option>
             </select>
-            
+
             <Label htmlFor="roll">Board Roll</Label>
-            <Input
-              value={studentData.roll}
-              {...register("roll")}
-              type="text"
-              placeholder="Board Roll"
-            />
+            <Input {...register("roll")} type="text" placeholder="Board Roll" />
           </div>
           <div className="grid w-full max-w-sm items-center gap-1.5">
             <Label htmlFor="studentId">Student Id.</Label>
             <Input
-              value={studentData.studentId}
               {...register("studentId", { required: true })}
               type="text"
               placeholder="Student Identification no"
@@ -443,7 +433,6 @@ function EditStudentForm({ id }) {
             </select>
             <Label htmlFor="registrationNumber">Registration no.</Label>
             <Input
-              value={studentData.registrationNumber}
               {...register("registrationNumber")}
               type="text"
               placeholder="Registration Number"
