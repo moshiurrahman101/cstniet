@@ -8,7 +8,8 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import StudentsListTable from "../_components/StudentsListTable";
+import TeachersListTable from "./_components/TeachersListTable";
+
 
 async function getStudentData() {
     try {
@@ -88,7 +89,7 @@ function Students() {
           <Link href={'/dashboard/teachers/add'}>+ Add New Teachers</Link>
         </Button>
       </div>
-      
+      <TeachersListTable studentList={studentsData} refreshData={dataRefreshTrigger}/>
     </div>
   );
 }
