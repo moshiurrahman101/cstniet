@@ -11,9 +11,9 @@ import { useDispatch, useSelector } from "react-redux";
 import TeachersListTable from "./_components/TeachersListTable";
 
 
-async function getStudentData() {
+async function getTeachersData() {
     try {
-        const querySnapshot = await getDocs(collection(firestore, "students"));
+        const querySnapshot = await getDocs(collection(firestore, "teachers"));
         const data = [];
 
         querySnapshot.forEach((doc) => {
@@ -30,7 +30,7 @@ async function getStudentData() {
 function Students() {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true); // Loading state
-  const [studentsData, setStudentsData] = useState([]); // Loading state
+  const [teachersData, setTeachersData] = useState([]); // Loading state
   const [refreshTrigger, setRefreshTrigger] = useState(false);
   const router = useRouter();
 
@@ -57,16 +57,16 @@ function Students() {
   // getting student 
   useEffect(()=> {
     async function fetchData() {
-      const data = await getStudentData();
-      setStudentsData(data);
+      const data = await getTeachersData();
+      setTeachersData(data);
     }
     fetchData();
   },[])
   useEffect(()=> {
     if (refreshTrigger) {
       async function fetchData() {
-        const data = await getStudentData();
-        setStudentsData(data);
+        const data = await getTeachersData();
+        setTeachersData(data);
       }
       fetchData();
     }
@@ -89,7 +89,7 @@ function Students() {
           <Link href={'/dashboard/teachers/add'}>+ Add New Teachers</Link>
         </Button>
       </div>
-      <TeachersListTable studentList={studentsData} refreshData={dataRefreshTrigger}/>
+      <TeachersListTable studentList={teachersData} refreshData={dataRefreshTrigger}/>
     </div>
   );
 }

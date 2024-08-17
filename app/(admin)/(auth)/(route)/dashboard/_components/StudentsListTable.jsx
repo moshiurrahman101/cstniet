@@ -25,7 +25,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import deleteStudentRecord from "@/firebase/deleteOperations";
+import {deleteStudentRecord} from "@/firebase/deleteOperations";
 import { useRouter } from "next/navigation";
 import StudentDetails from "./StudentDetails";
 

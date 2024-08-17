@@ -25,9 +25,9 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import deleteStudentRecord from "@/firebase/deleteOperations";
+import { deleteTeacherRecord } from "@/firebase/deleteOperations";
 import { useRouter } from "next/navigation";
-import StudentDetails from "../../_components/StudentDetails";
+import TeacherDetails from "./TeacherDetails";
 
 const pagination = true;
 const paginationPageSize = 10;
@@ -46,9 +46,9 @@ function TeachersListTable({ studentList, refreshData }) {
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>Student Information</DialogTitle>
+              <DialogTitle>Teachers Information</DialogTitle>
               <DialogDescription>
-                <StudentDetails id={props.data.id}/>
+                <TeacherDetails id={props.data.id} />
               </DialogDescription>
             </DialogHeader>
           </DialogContent>
@@ -86,7 +86,7 @@ function TeachersListTable({ studentList, refreshData }) {
   };
   // CRUD Functionality of record
   const deleteRecord = async (id) => {
-    const result = await deleteStudentRecord(id);
+    const result = await deleteTeacherRecord(id);
     if (result) {
       refreshData();
     }
@@ -94,24 +94,16 @@ function TeachersListTable({ studentList, refreshData }) {
 
   // Edit actions
   const EditActionHandle = (id) => {
-    router.push(`/dashboard/students/edit/${id}`);
+    router.push(`/dashboard/teachers/edit/${id}`);
   };
 
   const { theme } = useTheme();
   const [colDefs, setColDefs] = useState([
     { field: "id", filter: true },
-    { field: "studentName", filter: true },
-    { field: "studentPhone", filter: true },
-    { field: "guardianPhone", filter: true },
-    { field: "roll", filter: true },
-    { field: "registrationNumber", filter: true },
-    { field: "studentId", filter: true },
-    { field: "institute", filter: true },
-    { field: "studentType", filter: true },
-    { field: "session", filter: true },
-    { field: "semester", filter: true },
-    { field: "bloodGroup", filter: true },
-    { field: "address", filter: true },
+    { field: "teacherName", filter: true },
+    { field: "teacherPhone", filter: true },
+    { field: "department", filter: true },
+    { field: "designation", filter: true },
     { field: "action", cellRenderer: customActionButton },
   ]);
 
